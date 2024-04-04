@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title >SmartBin</title>
+    <title>SmartBin</title>
     
     <style>
         /* Corrected font import */
-        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Reddit+Mono:wght@200..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto:wght@400;700&display=swap');
 
         body {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            font-family: 'Roboto', sans-serif;
+            background-color: #74dc2a;
         }
 
         .container {
@@ -24,55 +25,103 @@
 
         h1 {
             text-align: center;
-            color: #333;
+            color: #49ac38;
             margin-top: 0;
-            /* Applying Reddit Mono font */
-            font-family: 'Reddit Mono', monospace;
+            font-family: 'Oswald', sans-serif;
         }
 
         .sensor-data {
             margin-top: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #d4f1cb;
+            border: 1px solid #b5d8a6;
             border-radius: 3px;
             font-family: "Oswald", sans-serif;
             font-optical-sizing: auto;
+        }
+
+        .sensor-data h2 {
+            margin: 0;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .sensor-data p {
+            margin: 10px 0;
+            color: #666;
+            text-align: center;
+        }
+
+        .alert-detected {
+            background-color: #d4f1cb; 
+            border-color: #449835; 
+            color: #449835; 
+        }
+
+        .alert-not-detected {
+            background-color: #f7d7db; 
+            border-color: #f1a4ac; 
+            color: #8f3d40; 
+        }
+
+        .sensor-data#status-bin {
+            margin-top: 20px; 
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .sensor-data {
+                padding: 10px;
+            }
+            .sensor-data h2 {
+                font-size: 18px;
+            }
+            .sensor-data p {
+                font-size: 16px;
+            }
         }
     </style>
     <script>
         fetch('https://api.thingspeak.com/channels/2496593/feeds.json?api_key=CZHP9PBE6XIAAJ9Y&results=1')
         .then(response => response.json())
         .then(data => {
-            
             const feed = data.feeds[0];
             document.getElementById('temperature').innerText = `Temperature: ${feed.field1} °C`;
             document.getElementById('humidity').innerText = `Humidity: ${feed.field2} %`;
             document.getElementById('soilMoisture').innerText = `Soil Moisture: ${feed.field3} %`;
             document.getElementById('co2Presence').innerText = `CO2 Presence: ${feed.field4 === '1' ? 'Detected' : 'Not Detected'}`;
+            const binStatusElement = document.getElementById('status-bin');
+            binStatusElement.innerText = `Bin Status: ${feed.field5 === '1' ? 'Detected' : 'Not Detected'}`;
+            binStatusElement.classList.add(feed.field5 === '1' ? 'alert-detected' : 'alert-not-detected');
         })
         .catch(error => console.error('Error:', error));
-
-        fetch('https://api.thingspeak.com/channels/2496480/feeds.json?api_key=CQ0RWXNK3GHL5HIN&results=1')
-        .then(response => response.json())
-        .then(data => {
-            
-            const feed = data.feeds[0];
-        
-            document.getElementById('status-bin').innerText = `Bin Status: ${feed.field1 === '1' ? 'Detected' : 'Not Detected'}`;
-        })
-        .catch(error => console.error('Error:', error));
-
     </script>
 </head>
 <body>
     <div class="container">
         <h1>SmartBin Dashboard</h1>
-        <div class="sensor-data" id="temperature"></div>
-        <div class="sensor-data" id="humidity"></div>
-        <div class="sensor-data" id="soilMoisture"></div>
-        <div class="sensor-data" id="co2Presence"></div>
-        <div class="sensor-data" id="status-bin"></div>
+        <div class="sensor-data" id="temperature">
+            <h2>Temperature</h2>
+            <p id="temperature-value">Loading...</p>
+        </div>
+        <div class="sensor-data" id="humidity">
+            <h2>Humidity</h2>
+            <p id="humidity-value">Loading...</p>
+        </div>
+        <div class="sensor-data" id="soilMoisture">
+            <h2>Soil Moisture</h2>
+            <p id="soilMoisture-value">Loading...</p>
+        </div>
+        <div class="sensor-data" id="co2Presence">
+            <h2>CO2 Presence</h2>
+            <p id="co2Presence-value">Loading...</p>
+        </div>
+        <div class="sensor-data" id="status-bin"> 
+            <h2>Bin Status</h2>
+            <p id="status-bin-value">Loading...</p>
+        </div>
     </div>
 </body>
 </html>
