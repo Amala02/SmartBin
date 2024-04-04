@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartBin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+        }
+        .sensor-data {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+    </style>
+    <script>
+        fetch('https://api.thingspeak.com/channels/2496593/feeds.json?api_key=CZHP9PBE6XIAAJ9Y&results=1')
+        .then(response => response.json())
+        .then(data => {
+            
+            const feed = data.feeds[0];
+            document.getElementById('temperature').innerText = `Temperature: ${feed.field1} °C`;
+            document.getElementById('humidity').innerText = `Humidity: ${feed.field2} %`;
+            document.getElementById('soilMoisture').innerText = `Soil Moisture: ${feed.field3} %`;
+            document.getElementById('co2Presence').innerText = `CO2 Presence: ${feed.field4 === '1' ? 'Detected' : 'Not Detected'}`;
+        })
+        .catch(error => console.error('Error:', error));
+
+        fetch('https://api.thingspeak.com/channels/2496480/feeds.json?api_key=CQ0RWXNK3GHL5HIN&results=1')
+        .then(response => response.json())
+        .then(data => {
+            
+            const feed = data.feeds[0];
+        
+            document.getElementById('status-bin').innerText = `Bin Status: ${feed.field1 === '1' ? 'Detected' : 'Not Detected'}`;
+        })
+        .catch(error => console.error('Error:', error));
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>SmartBin Sensor Data</h1>
+        <div class="sensor-data" id="temperature"></div>
+        <div class="sensor-data" id="humidity"></div>
+        <div class="sensor-data" id="soilMoisture"></div>
+        <div class="sensor-data" id="co2Presence"></div>
+        <div class="sensor-data" id="status-bin"></div>
+    </div>
+</body>
+</html>
