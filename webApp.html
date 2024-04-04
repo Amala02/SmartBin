@@ -99,16 +99,25 @@
             }
         }
 
-        /* Styling for GitHub link */
-        #link-github {
+        
+
+        #notifs{
+            text-align: center;
             display: inline-block;
             margin-top: 20px;
-            text-align: center;
-            text-decoration: none;
-            color: #333;
+            font-size: 12px; 
+            font-family: "Oswald", sans-serif;
+            color: #000000;
+            min-height: 100px; 
+            width: 200px; 
+            padding: 10px; 
+            background-color: #fffafa; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
         }
     </style>
     <script>
+        //compartment2
         fetch('https://api.thingspeak.com/channels/2496593/feeds.json?api_key=CZHP9PBE6XIAAJ9Y&results=1')
         .then(response => response.json())
         .then(data => { //get response as promise which is converted to json. 
@@ -117,11 +126,31 @@
             document.getElementById('humidity').innerText = `Humidity: ${feed.field2} %`;
             document.getElementById('soilMoisture').innerText = `Soil Moisture: ${feed.field3} %`;
             document.getElementById('co2Presence').innerText = `CO2 Presence: ${feed.field4 === '1' ? 'Detected' : 'Not Detected'}`;
+            const temperature = parseFloat(feed.field1);
+            const temperatureMessage = document.getElementById('notifs');
+            if (temperature >= 32 && temperature <= 60) {
+                temperatureMessage.innerText = "Optimal temperature achieved";
+                temperatureMessage.style.color = "#449835"; // green color
+            } else {
+                temperatureMessage.innerText = "Optimal temperature not achieved";
+                temperatureMessage.style.color = "#8f3d40"; // red color
+            }
+        })
+            
+        .catch(error => console.error('Error:', error));
+
+        //compartment1
+        fetch('https://api.thingspeak.com/channels/2496480/feeds.json?api_key=CQ0RWXNK3GHL5HIN&results=1')
+        .then(response => response.json())
+        .then(data => { //get response as promise which is converted to json. 
+            const feed = data.feeds[0]; //this gets the latest data point from the array of single element derived from results=1   
             const binStatusElement = document.getElementById('status-bin');
-            binStatusElement.innerText = `Bin Status: ${feed.field5 === '1' ? 'Closed' : 'Open'}`;
-            binStatusElement.classList.add(feed.field5 === '1' ? 'alert-detected' : 'alert-not-detected');
+            binStatusElement.innerText = `Bin Status: ${feed.field1 === '1' ? 'Closed' : 'Open'}`;
+            binStatusElement.classList.add(feed.field1 === '1' ? 'alert-detected' : 'alert-not-detected');
         })
         .catch(error => console.error('Error:', error));
+
+        
     </script>
 </head>
 <body>
@@ -149,11 +178,10 @@
                 <p id="status-bin-value">Loading...</p>
             </div>
         </div>
-        <div id="link-github">
-            <a href="https://github.com/Amala02/SmartBin" target="_blank">
-                <i class="fab fa-github" style="font-size: 24px; color:black;"></i> View on GitHub
-            </a>
+        <div id="notifs">
+            
         </div>
+      
     </div>
 </body>
 </html>
