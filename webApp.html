@@ -3,10 +3,10 @@
 <head>
     <title>SmartBin</title>
     
-    <style>
-        /* Corrected font import */
-        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Reddit+Mono:wght@200..900&display=swap');
+    <!-- Corrected font import -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Reddit+Mono:wght@200..900&display=swap">
 
+    <style>
         body {
             margin: 0;
             padding: 0;
@@ -73,10 +73,19 @@
             margin-top: 20px; 
         }
 
+        #link-github {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+        }
+        
         @media (max-width: 600px) {
             .container {
-                width: 90%; /* Adjust width for smaller screens */
-                height: auto; /* Allow height to adjust */
+                width: 90%; 
+                height: auto;
                 padding: 10px;
             }
             .sensor-data {
@@ -89,45 +98,61 @@
                 font-size: 16px;
             }
         }
+
+        /* Styling for GitHub link */
+        #link-github {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+        }
     </style>
     <script>
         fetch('https://api.thingspeak.com/channels/2496593/feeds.json?api_key=CZHP9PBE6XIAAJ9Y&results=1')
         .then(response => response.json())
-        .then(data => {
-            const feed = data.feeds[0];
-            document.getElementById('temperature').innerText = `Temperature: ${feed.field1} °C`;
+        .then(data => { //get response as promise which is converted to json. 
+            const feed = data.feeds[0]; //this gets the latest data point from the array of single element derived from results=1
+            document.getElementById('temperature').innerText = `Temperature: ${feed.field1} °C`; //get feed(object)'s properties that act as keys(field1,field2 etc)
             document.getElementById('humidity').innerText = `Humidity: ${feed.field2} %`;
             document.getElementById('soilMoisture').innerText = `Soil Moisture: ${feed.field3} %`;
             document.getElementById('co2Presence').innerText = `CO2 Presence: ${feed.field4 === '1' ? 'Detected' : 'Not Detected'}`;
             const binStatusElement = document.getElementById('status-bin');
-            binStatusElement.innerText = `Bin Status: ${feed.field5 === '1' ? 'Detected' : 'Not Detected'}`;
+            binStatusElement.innerText = `Bin Status: ${feed.field5 === '1' ? 'Closed' : 'Open'}`;
             binStatusElement.classList.add(feed.field5 === '1' ? 'alert-detected' : 'alert-not-detected');
         })
         .catch(error => console.error('Error:', error));
     </script>
 </head>
 <body>
-    <div class="container">
-        <h1>SmartBin Dashboard</h1>
-        <div class="sensor-data" id="temperature">
-            <h2>Temperature</h2>
-            <p id="temperature-value">Loading...</p>
+    <div class="wrapper" style="text-align:center;">
+        <div class="container">
+            <h1>SmartBin Dashboard</h1>
+            <div class="sensor-data" id="temperature">
+                <h2>Temperature</h2>
+                <p id="temperature-value">Loading...</p>
+            </div>
+            <div class="sensor-data" id="humidity">
+                <h2>Humidity</h2>
+                <p id="humidity-value">Loading...</p>
+            </div>
+            <div class="sensor-data" id="soilMoisture">
+                <h2>Soil Moisture</h2>
+                <p id="soilMoisture-value">Loading...</p>
+            </div>
+            <div class="sensor-data" id="co2Presence">
+                <h2>CO2 Presence</h2>
+                <p id="co2Presence-value">Loading...</p>
+            </div>
+            <div class="sensor-data" id="status-bin"> 
+                <h2>Bin Status</h2>
+                <p id="status-bin-value">Loading...</p>
+            </div>
         </div>
-        <div class="sensor-data" id="humidity">
-            <h2>Humidity</h2>
-            <p id="humidity-value">Loading...</p>
-        </div>
-        <div class="sensor-data" id="soilMoisture">
-            <h2>Soil Moisture</h2>
-            <p id="soilMoisture-value">Loading...</p>
-        </div>
-        <div class="sensor-data" id="co2Presence">
-            <h2>CO2 Presence</h2>
-            <p id="co2Presence-value">Loading...</p>
-        </div>
-        <div class="sensor-data" id="status-bin"> 
-            <h2>Bin Status</h2>
-            <p id="status-bin-value">Loading...</p>
+        <div id="link-github">
+            <a href="https://github.com/Amala02/SmartBin" target="_blank">
+                <i class="fab fa-github" style="font-size: 24px; color:black;"></i> View on GitHub
+            </a>
         </div>
     </div>
 </body>
