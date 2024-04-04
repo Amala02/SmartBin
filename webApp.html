@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SmartBin</title>
+    <title >SmartBin</title>
+    
     <style>
+        /* Corrected font import */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Reddit+Mono:wght@200..900&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
         }
+
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -17,17 +21,23 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         h1 {
             text-align: center;
             color: #333;
             margin-top: 0;
+            /* Applying Reddit Mono font */
+            font-family: 'Reddit Mono', monospace;
         }
+
         .sensor-data {
             margin-top: 20px;
             padding: 10px;
             background-color: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 3px;
+            font-family: "Oswald", sans-serif;
+            font-optical-sizing: auto;
         }
     </style>
     <script>
@@ -57,7 +67,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>SmartBin Sensor Data</h1>
+        <h1>SmartBin Dashboard</h1>
         <div class="sensor-data" id="temperature"></div>
         <div class="sensor-data" id="humidity"></div>
         <div class="sensor-data" id="soilMoisture"></div>
