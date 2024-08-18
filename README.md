@@ -1,6 +1,7 @@
 # SmartBin
 
-This is the software code of the project: SmartBin
+## This is the software code of the project: SmartBin.
+
 We developed a Smart Bin prototype with a dashboard for displaying Temperature, Humidity, Oxygen
 gas content and status of lid in real time to users.
 Features:
